@@ -896,66 +896,6 @@ function Assets:Keybind(Parent,ScreenAsset,Window,Keybind)
 		Window.Colorable[Keybind.ListMimic.Asset.Tick] = Keybind.ListMimic.ColorConfig
 	end
 
-	UserInputService.InputBegan:Connect(function(Input, GameProcessedEvent)
-		if GameProcessedEvent then return end
-		local Key = Input.KeyCode.Name
-		if Keybind.WaitingForBind and Input.UserInputType.Name == "Keyboard" then
-			Keybind.Value = Key
-		elseif Input.UserInputType.Name == "Keyboard" then
-			if Key == Keybind.Value then
-				Keybind.Toggle = not Keybind.Toggle
-				if Keybind.ListMimic then
-					Keybind.ListMimic.ColorConfig[1] = true
-					Keybind.ListMimic.Asset.Tick.BackgroundColor3 = Window.Color
-				end
-				Keybind.Callback(Keybind.Value,true,Keybind.Toggle)
-			end
-		end
-		if Keybind.Mouse then Key = Input.UserInputType.Name
-			if Keybind.WaitingForBind and (Key == "MouseButton1"
-				or Key == "MouseButton2" or Key == "MouseButton3") then
-				Keybind.Value = Key
-			elseif Key == "MouseButton1"
-				or Key == "MouseButton2"
-				or Key == "MouseButton3" then
-				if Key == Keybind.Value then
-					Keybind.Toggle = not Keybind.Toggle
-					if Keybind.ListMimic then
-						Keybind.ListMimic.ColorConfig[1] = true
-						Keybind.ListMimic.Asset.Tick.BackgroundColor3 = Window.Color
-					end
-					Keybind.Callback(Keybind.Value,true,Keybind.Toggle)
-				end
-			end
-		end
-	end)
-	UserInputService.InputEnded:Connect(function(Input, GameProcessedEvent)
-		if GameProcessedEvent then return end
-		local Key = Input.KeyCode.Name
-		if Input.UserInputType.Name == "Keyboard" then
-			if Key == Keybind.Value then
-				if Keybind.ListMimic then
-					Keybind.ListMimic.ColorConfig[1] = false
-					Keybind.ListMimic.Asset.Tick.BackgroundColor3 = Color3.fromRGB(60,60,60)
-				end
-				Keybind.Callback(Keybind.Value,false,Keybind.Toggle)
-			end
-		end
-		if Keybind.Mouse then Key = Input.UserInputType.Name
-			if Key == "MouseButton1"
-				or Key == "MouseButton2"
-				or Key == "MouseButton3" then
-				if Key == Keybind.Value then
-					if Keybind.ListMimic then
-						Keybind.ListMimic.ColorConfig[1] = false
-						Keybind.ListMimic.Asset.Tick.BackgroundColor3 = Color3.fromRGB(60,60,60)
-					end
-					Keybind.Callback(Keybind.Value,false,Keybind.Toggle)
-				end
-			end
-		end
-	end)
-
 	Keybind:GetPropertyChangedSignal("Name"):Connect(function(Name)
 		KeybindAsset.Title.Text = Name
 	end)
@@ -1011,50 +951,7 @@ function Assets:ToggleKeybind(Parent,ScreenAsset,Window,Keybind,Toggle)
 		Keybind.ListMimic.ColorConfig = {false,"BackgroundColor3"}
 		Window.Colorable[Keybind.ListMimic.Asset.Tick] = Keybind.ListMimic.ColorConfig
 	end
-
-	UserInputService.InputBegan:Connect(function(Input, GameProcessedEvent)
-		if GameProcessedEvent then return end
-		local Key = Input.KeyCode.Name
-		if Keybind.WaitingForBind and Input.UserInputType.Name == "Keyboard" then
-			Keybind.Value = Key
-		elseif Input.UserInputType.Name == "Keyboard" then
-			if Key == Keybind.Value then
-				if not Keybind.DisableToggle then Toggle.Value = not Toggle.Value end
-				Keybind.Callback(Keybind.Value,true,Toggle.Value)
-			end
-		end
-		if Keybind.Mouse then Key = Input.UserInputType.Name
-			if Keybind.WaitingForBind and (Key == "MouseButton1"
-				or Key == "MouseButton2" or Key == "MouseButton3") then
-				Keybind.Value = Key
-			elseif Key == "MouseButton1"
-				or Key == "MouseButton2"
-				or Key == "MouseButton3" then
-				if Key == Keybind.Value then
-					if not Keybind.DisableToggle then Toggle.Value = not Toggle.Value end
-					Keybind.Callback(Keybind.Value,true,Toggle.Value)
-				end
-			end
-		end
-	end)
-	UserInputService.InputEnded:Connect(function(Input, GameProcessedEvent)
-		if GameProcessedEvent then return end
-		local Key = Input.KeyCode.Name
-		if Input.UserInputType.Name == "Keyboard" then
-			if Key == Keybind.Value then
-				Keybind.Callback(Keybind.Value,false,Toggle.Value)
-			end
-		end
-		if Keybind.Mouse then Key = Input.UserInputType.Name
-			if Key == "MouseButton1"
-				or Key == "MouseButton2"
-				or Key == "MouseButton3" then
-				if Key == Keybind.Value then
-					Keybind.Callback(Keybind.Value,false,Toggle.Value)
-				end
-			end
-		end
-	end)
+	
 	
 	Toggle:GetPropertyChangedSignal("Value"):Connect(function(Value)
 		if Keybind.ListMimic then
